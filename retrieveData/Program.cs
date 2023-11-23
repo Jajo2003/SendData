@@ -3,6 +3,8 @@ using System.Numerics;
 using OfficeOpenXml;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Net;
+
 namespace retrievedata
 {
 	class dataClass
@@ -39,13 +41,7 @@ namespace retrievedata
 					{
 						Trackings.Add(sheet.Cells["A" + $"{i}"].Text);
 					}
-					for (int i = 1; i <= rowCount; i++)
-					{
-						Console.WriteLine(Trackings[i]);
-					}
-
-
-
+				
 					await SendData(Trackings);
 
 				}
@@ -60,40 +56,41 @@ namespace retrievedata
 			}
 		}
 
-		private static async Task SendData(List<string> Trackings)
+		public static async Task SendData(List<string> Trackings)
 		{
-
+			
 			try
 			{
 				using (var httpClient = new HttpClient())
 				{
-					var Url = "http://localhost:5500/AJAX/";
+					var Url = "http://localhost:5500/data";
 
-					var Data = new FormUrlEncodedContent(new Dictionary<string, string>{
+					var Data = new FormUrlEncodedContent(new Dictionary<string, string>
+			{
+				{"Trackings", string.Join(".", Trackings) }
+			});
 
-						{"Trackings",string.Join(".",Trackings) }
 
-					});
 					var response = await httpClient.PostAsync(Url, Data);
-
-					response.EnsureSuccessStatusCode();
-
 					var responseBody = await response.Content.ReadAsStringAsync();
-					Console.WriteLine($"Response from website : ${responseBody}");
-					Console.WriteLine("Data Retrieved Succesfully");
 
+					if (response.IsSuccessStatusCode)
+					{
+						Console.WriteLine($"Response from website: {responseBody}");
+						Console.WriteLine("Data Retrieved Successfully");
+					}
+					else
+					{
+						Console.WriteLine($"Error: Status Code {response.StatusCode}");
+						Console.WriteLine($"Response Body: {responseBody}");
+					}
 				}
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"{ex.Message}   Error");
 			}
-
 		}
-
-
-
-
 
 
 
