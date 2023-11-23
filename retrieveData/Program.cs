@@ -9,14 +9,25 @@ namespace retrievedata
 	{
 		public static async Task Main()
 		{
-			var path = "C:\\Users\\JAJO\\Downloads\\tracking.xlsx";
+
+			Console.Write("Input your Path: ");
+
+			string pathtofile = Console.ReadLine();
+
+			Console.Write("File name:");
+
+			string filename = Console.ReadLine();
+
+			string path = pathtofile + @"\" +filename +".xlsx";
+
+
 			List<string> Trackings = new List<string>();
 
 			try
 			{
 				ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 				using (var package = new ExcelPackage(new FileInfo(path)))
-				{ 
+				{
 
 					var sheet = package.Workbook.Worksheets[0];
 
@@ -24,16 +35,21 @@ namespace retrievedata
 					int rowCount = sheet.Dimension.Rows;
 
 					//Cikli amatebs Excel failshi arsebul informacias.
-					for (int i = 1; i <= rowCount; i++) 
+					for (int i = 1; i <= rowCount; i++)
 					{
-						Trackings.Add(sheet.Cells["A" + $"{i}"].Text);						
+						Trackings.Add(sheet.Cells["A" + $"{i}"].Text);
+					}
+					for (int i = 1; i <= rowCount; i++)
+					{
+						Console.WriteLine(Trackings[i]);
 					}
 
 
+
 					await SendData(Trackings);
-					
+
 				}
-				
+
 
 
 			}
@@ -74,10 +90,14 @@ namespace retrievedata
 			}
 
 		}
+
+
+
+
+
+
+
 	}
-
-
-
 
 
 }
