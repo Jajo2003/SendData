@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using HtmlAgilityPack;
 
-//C:\Users\JAJO\Downloads tracking
+
 namespace retrievedata
 {
 	class dataClass
@@ -14,16 +14,15 @@ namespace retrievedata
 		public static async Task Main()
 		{
 
-			/*Console.Write("Input your Path: ");*/
+			Console.Write("Input your Path: ");
 
-			/*string pathtofile = Console.ReadLine();
+			string pathtofile = Console.ReadLine();
 
 			Console.Write("File name:");
 
-			string filename = Console.ReadLine();*/
+			string filename = Console.ReadLine();
 
-			string path = @"C:\Users\JAJO\Downloads\tracking.xlsx";
-
+			string path = pathtofile +@"\"+ filename +".xlsx";
 
 			List<string> Trackings = new List<string>();
 
@@ -86,6 +85,7 @@ namespace retrievedata
 						Console.WriteLine("Data Retrieved Successfully");
 
 						HttpResponseMessage responseContent = await httpClient.GetAsync(Url);
+						await Task.Delay(10000);
 
 						if (responseContent.IsSuccessStatusCode)
 						{
@@ -98,9 +98,18 @@ namespace retrievedata
 
 							var inputTag = htmldom.DocumentNode.SelectSingleNode("//*[@id = 'trId']");
 
-							if(inputTag != null)
+
+
+							if (inputTag == null)
 							{
-								foreach(var tracking in Trackings)
+								foreach (var tracking in Trackings)
+								{
+									Console.WriteLine("tag not found");
+								}
+							}
+							else
+							{
+								foreach (var tracking in Trackings)
 								{
 									Console.WriteLine(tracking);
 									inputTag.SetAttributeValue("value", tracking);
@@ -109,10 +118,6 @@ namespace retrievedata
 									inputTag.SetAttributeValue("value", null);
 									System.Threading.Thread.Sleep(1000);
 								}
-							}
-							else
-							{
-								Console.WriteLine("tag not found");
 							}
 						
 						}
@@ -127,7 +132,7 @@ namespace retrievedata
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"{ex.Message}   Error");
+				Console.WriteLine($"{ex.Message} Error");
 
 			}
 		}
