@@ -91,8 +91,7 @@ namespace retrievedata
 						
 
 						foreach (var tracking in Trackings)
-						{
-							Console.WriteLine(tracking);
+						{ 
 
 							inputTag.SendKeys(tracking);
 							await Task.Delay(miliseconds);
@@ -112,13 +111,7 @@ namespace retrievedata
 
 
 
-		/*
-		 * 
 		
-		 C:\Users\JAJO\Downloads
-		tracking
-
-		 */
 
 
 
