@@ -108,13 +108,7 @@ namespace retrievedata
 
 
 
-	/*
-	git add 
-	C:\Users\JAJO\Downloads
-	tracking
-
-
-	 */
+	
 
 
 }
