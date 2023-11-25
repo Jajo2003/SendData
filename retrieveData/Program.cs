@@ -4,8 +4,11 @@ using OfficeOpenXml;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Net;
-using HtmlAgilityPack;
-
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Chrome;
+using System.Diagnostics;
 
 namespace retrievedata
 {
@@ -14,7 +17,7 @@ namespace retrievedata
 		public static async Task Main()
 		{
 
-			Console.Write("Input your Path: ");
+			Console.Write("Input your Path:");
 
 			string pathtofile = Console.ReadLine();
 
@@ -57,89 +60,62 @@ namespace retrievedata
 			}
 		}
 
+
 		public static async Task SendData(List<string> Trackings)
-		{
-			
+		{ 
+
 			try
-			{
-				using (var httpClient = new HttpClient())
+			{ 
+
+
+				using (var driver = new ChromeDriver())
 				{
-					var Url = "http://localhost:5500/index";
+					driver.Navigate().GoToUrl("http://localhost:5500/index");
 
-					var Data = new FormUrlEncodedContent(new Dictionary<string, string>
-			{
-				{"Trackings", string.Join(".", Trackings) }
-			});
+					IWebElement inputTag = driver.FindElement(By.Id("trId"));
 
-
-					var response = await httpClient.PostAsync(Url, Data);
-
-					var responseBody = await response.Content.ReadAsStringAsync();
-
-				
-
-					
-					if (response.IsSuccessStatusCode)
+					if (inputTag == null)
 					{
-						Console.WriteLine($"Response from website: {responseBody}");
-						Console.WriteLine("Data Retrieved Successfully");
-
-						HttpResponseMessage responseContent = await httpClient.GetAsync(Url);
-						await Task.Delay(10000);
-
-						if (responseContent.IsSuccessStatusCode)
-						{
-							var htmlContent = await responseContent.Content.ReadAsStringAsync();
-							Console.WriteLine("HTML Content:");
-							Console.WriteLine(htmlContent);
-
-							var htmldom = new HtmlDocument();
-							htmldom.LoadHtml(htmlContent);
-
-							var inputTag = htmldom.DocumentNode.SelectSingleNode("//*[@id = 'trId']");
-
-
-
-							if (inputTag == null)
-							{
-								foreach (var tracking in Trackings)
-								{
-									Console.WriteLine("tag not found");
-								}
-							}
-							else
-							{
-								foreach (var tracking in Trackings)
-								{
-									Console.WriteLine(tracking);
-									inputTag.SetAttributeValue("value", tracking);
-
-									System.Threading.Thread.Sleep(1000);
-									inputTag.SetAttributeValue("value", null);
-									System.Threading.Thread.Sleep(1000);
-								}
-							}
-						
-						}
-
-					}	
+						Console.WriteLine("tag not found");
+					}
 					else
 					{
-						Console.WriteLine($"Error: Status Code {response.StatusCode}");
-						Console.WriteLine($"Response Body: {responseBody}");
+						foreach (var tracking in Trackings)
+						{
+							Console.WriteLine(tracking);
+
+							inputTag.SendKeys(tracking);
+							await Task.Delay(700);
+
+							inputTag.Clear();
+							await Task.Delay(700);
+						}
 					}
 				}
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"{ex.Message} Error");
-
 			}
 		}
-		
+
+
+
+
 
 
 	}
 
 
+
+	/*
+
+	C:\Users\JAJO\Downloads
+	tracking
+
+
+	 */
+
+
 }
+
