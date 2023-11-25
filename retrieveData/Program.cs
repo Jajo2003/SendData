@@ -65,14 +65,22 @@ namespace retrievedata
 		{ 
 
 			try
-			{ 
+			{
+
+				Console.Write("sheiyvanet wamebis raodenoba (wamebshi):");
+				double seconds = Convert.ToDouble(Console.ReadLine());
+
+				int miliseconds = (int)(seconds * 1000);
+
+
+
 
 
 				using (var driver = new ChromeDriver())
 				{
-					driver.Navigate().GoToUrl("http://localhost:5500/index");
+					driver.Navigate().GoToUrl("https://www.starling.ge/ka/register");
 
-					IWebElement inputTag = driver.FindElement(By.Id("trId"));
+					IWebElement inputTag = driver.FindElement(By.Id("name_geo_1"));
 
 					if (inputTag == null)
 					{
@@ -80,15 +88,17 @@ namespace retrievedata
 					}
 					else
 					{
+						
+
 						foreach (var tracking in Trackings)
 						{
 							Console.WriteLine(tracking);
 
 							inputTag.SendKeys(tracking);
-							await Task.Delay(1000);
+							await Task.Delay(miliseconds);
 
 							inputTag.Clear();
-							await Task.Delay(1000);
+							await Task.Delay(miliseconds);
 						}
 					}
 				}
@@ -98,9 +108,17 @@ namespace retrievedata
 				Console.WriteLine($"{ex.Message} Error");
 			}
 		}
+	
 
 
 
+		/*
+		 * 
+		
+		 C:\Users\JAJO\Downloads
+		tracking
+
+		 */
 
 
 
@@ -108,7 +126,7 @@ namespace retrievedata
 
 
 
-	
+
 
 
 }
