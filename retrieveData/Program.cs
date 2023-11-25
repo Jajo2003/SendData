@@ -85,10 +85,10 @@ namespace retrievedata
 							Console.WriteLine(tracking);
 
 							inputTag.SendKeys(tracking);
-							await Task.Delay(700);
+							await Task.Delay(1000);
 
 							inputTag.Clear();
-							await Task.Delay(700);
+							await Task.Delay(1000);
 						}
 					}
 				}
@@ -109,7 +109,7 @@ namespace retrievedata
 
 
 	/*
-
+	git add 
 	C:\Users\JAJO\Downloads
 	tracking
 
