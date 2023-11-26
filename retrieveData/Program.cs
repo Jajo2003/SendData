@@ -9,6 +9,9 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Chrome;
 using System.Diagnostics;
+using WebDriverManager.DriverConfigs.Impl;
+using OpenQA.Selenium.Support.UI;
+
 
 namespace retrievedata
 {
@@ -47,8 +50,6 @@ namespace retrievedata
 					}
 					await SendData(Trackings);
 				}
-				Console.WriteLine("\n\ndasrulebistvis daachiret sasurvel klavishs!!!");
-				Console.ReadKey();
 
 			}
 			catch (Exception ex)
@@ -56,8 +57,14 @@ namespace retrievedata
 
 				Console.WriteLine($"An error occurred: {ex.Message}");
 			}
+			finally
+			{
+				Console.WriteLine("\n\ndasrulebistvis daachiret sasurvel klavishs!!!");
 
-			
+				Console.ReadKey();
+			}
+
+
 		}
 
 
@@ -68,10 +75,16 @@ namespace retrievedata
 			{
 
 				Console.Write("sheiyvanet wamebis raodenoba (wamebshi):");
+
+				
+
 				double seconds = Convert.ToDouble(Console.ReadLine());
 
 				int miliseconds = (int)(seconds * 1000);
 
+				Console.Write("Sheiyvanet Paroli:");
+
+				string password = Console.ReadLine();
 
 
 
@@ -80,7 +93,61 @@ namespace retrievedata
 				{
 					driver.Navigate().GoToUrl("https://decl.rs.ge/decls.aspx");
 
-					IWebElement inputTag = driver.FindElement(By.Id("decl_input_t scan_postnumber"));
+					driver.Manage().Window.Maximize();
+
+
+					var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(3000));
+
+					IWebElement usernameField = driver.FindElement(By.Id("username"));
+					IWebElement passwordField = driver.FindElement(By.Id("password"));
+					IWebElement loginButton = driver.FindElement(By.Id("btnLogin"));
+
+					await Task.Delay(2000);
+
+					usernameField.SendKeys("404640411");
+					passwordField.SendKeys(password);
+
+					//167075
+					await Task.Delay(3000);
+
+					loginButton.Click();
+
+					await Task.Delay(6000);
+
+
+					IWebElement OpenPage = driver.FindElement(By.ClassName("divModuleName"));
+					await Task.Delay(5000);
+
+					OpenPage.Click();
+
+					await Task.Delay(5000);
+
+
+
+					List<IWebElement> openModals = wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.Id("control_0_smt"))).ToList();
+
+
+
+					await Task.Delay(3000);
+
+					foreach (var modal in openModals)
+					{
+					
+						string a = modal.GetAttribute("innerHTML");
+						Console.WriteLine(a);
+						if (modal.GetAttribute("innerHTML") == "<div>დარიდერება</div>")
+						{ 
+							modal.Click();
+							break;
+						}
+
+					}
+
+					await Task.Delay(30000);
+
+
+					IWebElement inputTag = driver.FindElement(By.ClassName("scan_postnumber"));
+					await Task.Delay(3000);
 
 					if (inputTag == null)
 					{
@@ -91,14 +158,18 @@ namespace retrievedata
 						
 
 						foreach (var tracking in Trackings)
-						{ 
+						{
+							inputTag.Clear();
+							await Task.Delay(miliseconds);
 
 							inputTag.SendKeys(tracking);
 							await Task.Delay(miliseconds);
 
-							inputTag.Clear();
+							inputTag.SendKeys(Keys.Enter);
+
 							await Task.Delay(miliseconds);
 						}
+						await Task.Delay(5000);
 					}
 				}
 			}
