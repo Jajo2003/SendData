@@ -45,12 +45,10 @@ namespace retrievedata
 					{
 						Trackings.Add(sheet.Cells["A" + $"{i}"].Text);
 					}
-				
 					await SendData(Trackings);
-
 				}
-
-
+				Console.WriteLine("\n\ndasrulebistvis daachiret sasurvel klavishs!!!");
+				Console.ReadKey();
 
 			}
 			catch (Exception ex)
@@ -58,6 +56,8 @@ namespace retrievedata
 
 				Console.WriteLine($"An error occurred: {ex.Message}");
 			}
+
+			
 		}
 
 
