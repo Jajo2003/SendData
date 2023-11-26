@@ -40,7 +40,7 @@ namespace retrievedata
 
 					int rowCount = sheet.Dimension.Rows;
 
-					//Cikli amatebs Excel failshi arsebul informacias.
+					
 					for (int i = 1; i <= rowCount; i++)
 					{
 						Trackings.Add(sheet.Cells["A" + $"{i}"].Text);
@@ -78,9 +78,9 @@ namespace retrievedata
 
 				using (var driver = new ChromeDriver())
 				{
-					driver.Navigate().GoToUrl("https://www.starling.ge/ka/register");
+					driver.Navigate().GoToUrl("https://decl.rs.ge/decls.aspx");
 
-					IWebElement inputTag = driver.FindElement(By.Id("name_geo_1"));
+					IWebElement inputTag = driver.FindElement(By.Id("decl_input_t scan_postnumber"));
 
 					if (inputTag == null)
 					{
@@ -107,13 +107,6 @@ namespace retrievedata
 				Console.WriteLine($"{ex.Message} Error");
 			}
 		}
-	
-
-
-
-		
-
-
 
 	}
 
